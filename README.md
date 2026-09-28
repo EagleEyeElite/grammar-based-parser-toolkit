@@ -1,4 +1,4 @@
-# grammar-parser-toolkit
+# grammar-based-parser-toolkit
 
 Turn messy, free-form strings into structured data by writing small grammar rules and combining them.
 
@@ -22,7 +22,7 @@ npm run example   # parses a list of sample opening-hours strings
 ```
 
 It isn't published to npm; install it from GitHub with
-`npm install github:EagleEyeElite/grammar-parser-toolkit`.
+`npm install github:EagleEyeElite/grammar-based-parser-toolkit`.
 
 ## How it works
 
@@ -58,7 +58,7 @@ A grammar for shopping lists like `3x Äpfel, 2 x Birnen, 10x Eier`:
 import {
     ComponentParser, WhiteSpace, Comma, createToken,
     type GrammarBuilder, type GrammarComponent, type IToken, type Visitor, type CstNode,
-} from 'grammar-parser-toolkit';
+} from 'grammar-based-parser-toolkit';
 
 const Quantity = createToken({ name: 'Quantity', pattern: /\d+\s*x/i });
 const Item = createToken({ name: 'Item', pattern: /[A-Za-zÄÖÜäöüß]+/ });
@@ -113,7 +113,7 @@ This example is also a test: [`test/customGrammar.test.ts`](test/customGrammar.t
 ## Example: German opening hours
 
 ```ts
-import { parse, parseMany, isReliable } from 'grammar-parser-toolkit';
+import { parse, parseMany, isReliable } from 'grammar-based-parser-toolkit';
 
 parse('Mo-Fr 08:00-16:30 Uhr, außer an Feiertagen');
 // [
