@@ -1,7 +1,7 @@
 {
-  "name": "german-opening-hours-parser",
+  "name": "grammar-parser-toolkit",
   "version": "2.0.0",
-  "description": "Parses German opening-hours text like \"Mo-Fr 08:00-16:00 Uhr, außer an Feiertagen\" into structured data",
+  "description": "Compose small Chevrotain grammar components into parsers that turn free-form strings into structured data. Ships with a full grammar for German opening hours.",
   "private": true,
   "type": "module",
   "exports": {

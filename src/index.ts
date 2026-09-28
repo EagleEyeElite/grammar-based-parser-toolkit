@@ -6,6 +6,20 @@ import { baseTokens } from './rules/sharedTokens.ts';
 import operatingHours, { type OpeningHoursEntry } from './rules/operatingHours.ts';
 import { ClosureSubject } from './rules/closures.ts';
 
+// Toolkit: build your own grammar
+export { createToken, type TokenType, type IToken, type CstNode } from 'chevrotain';
+export {
+    ComponentParser,
+    type GrammarBuilder,
+    type GrammarComponent,
+    type Rule,
+    type Visitor,
+    type VisitorMethod,
+} from './componentParser.ts';
+export { baseTokens, WhiteSpace, Dash, Bis, Comma, Semicolon } from './rules/sharedTokens.ts';
+
+// Opening-hours grammar
+export { default as openingHoursGrammar } from './rules/operatingHours.ts';
 export { ClosureSubject } from './rules/closures.ts';
 export { DayEnum, type Weekday } from './rules/days.ts';
 export type { OpeningHoursEntry } from './rules/operatingHours.ts';
