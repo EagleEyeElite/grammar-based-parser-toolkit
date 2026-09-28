@@ -1,0 +1,20 @@
+{
+  "name": "german-opening-hours-parser",
+  "version": "1.0.0",
+  "description": "Parses German opening-hours text like \"Mo-Fr 08:00-16:00 Uhr, außer an Feiertagen\" into structured data",
+  "private": true,
+  "type": "module",
+  "exports": "./src/index.js",
+  "scripts": {
+    "test": "node --test",
+    "example": "node examples/parse-list.js"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "author": "Conrad Klaus",
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "chevrotain": "^13.2.0"
+  }
+}
