@@ -3,9 +3,9 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { ComponentParser } from '../src/componentParser.js';
-import { baseTokens } from '../src/rules/sharedTokens.js';
-import alwaysOpen from '../src/rules/alwaysOpen.js';
+import { ComponentParser } from '../src/componentParser.ts';
+import { baseTokens } from '../src/rules/sharedTokens.ts';
+import alwaysOpen from '../src/rules/alwaysOpen.ts';
 
 const parser = new ComponentParser(alwaysOpen, baseTokens);
 

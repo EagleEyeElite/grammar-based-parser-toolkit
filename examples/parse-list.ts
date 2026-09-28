@@ -4,7 +4,7 @@
 // Parses a list of made-up opening-hours strings and prints the results.
 // Run with: npm run example
 
-import { parseMany, isReliable } from '../src/index.js';
+import { parseMany, isReliable, type OpeningHoursEntry } from '../src/index.ts';
 
 const inputs = [
     // Days: single, range, list, wrapping range
@@ -46,13 +46,13 @@ const inputs = [
 
 const dayNames = ['', 'Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
 
-function formatTime(minutes) {
+function formatTime(minutes: number): string {
     const h = String(Math.floor(minutes / 60)).padStart(2, '0');
     const m = String(minutes % 60).padStart(2, '0');
     return `${h}:${m}`;
 }
 
-function formatEntry(entry) {
+function formatEntry(entry: OpeningHoursEntry): string {
     switch (entry.type) {
         case 'OpenHours':
             return `${entry.days.map((d) => dayNames[d]).join(',')} ${formatTime(entry.startTime)}-${formatTime(entry.endTime)}`;
@@ -60,22 +60,20 @@ function formatEntry(entry) {
             return `note: ${entry.subject}`;
         case 'AlwaysOpen':
             return 'always open';
-        default:
-            return JSON.stringify(entry);
     }
 }
 
 const results = parseMany(inputs);
 
-for (const { input, ok, result, error } of results) {
-    console.log(input);
-    if (ok) {
-        for (const entry of result) {
+for (const outcome of results) {
+    console.log(outcome.input);
+    if (outcome.ok) {
+        for (const entry of outcome.result) {
             console.log(`  -> ${formatEntry(entry)}`);
         }
-        console.log(`  reliable: ${isReliable(result)}`);
+        console.log(`  reliable: ${isReliable(outcome.result)}`);
     } else {
-        console.log(`  x ${error}`);
+        console.log(`  x ${outcome.error}`);
     }
     console.log();
 }

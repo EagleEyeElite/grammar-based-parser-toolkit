@@ -1,20 +1,35 @@
 {
   "name": "german-opening-hours-parser",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Parses German opening-hours text like \"Mo-Fr 08:00-16:00 Uhr, außer an Feiertagen\" into structured data",
   "private": true,
   "type": "module",
-  "exports": "./src/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "node --test",
-    "example": "node examples/parse-list.js"
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc",
+    "test": "node --test 'test/**/*.test.ts'",
+    "example": "node examples/parse-list.ts",
+    "prepare": "npm run build"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22.18"
   },
   "author": "Conrad Klaus",
   "license": "GPL-3.0-only",
   "dependencies": {
     "chevrotain": "^13.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.3",
+    "typescript": "^7.0.2"
   }
 }

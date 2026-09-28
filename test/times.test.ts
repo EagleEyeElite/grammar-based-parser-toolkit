@@ -3,14 +3,14 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { ComponentParser } from '../src/componentParser.js';
-import { baseTokens } from '../src/rules/sharedTokens.js';
-import times, { convertTimeToMinutes } from '../src/rules/times.js';
+import { ComponentParser } from '../src/componentParser.ts';
+import { baseTokens } from '../src/rules/sharedTokens.ts';
+import times, { convertTimeToMinutes } from '../src/rules/times.ts';
 
 const parser = new ComponentParser(times, baseTokens);
 
 describe('times', () => {
-    const valid = [
+    const valid: [string, { startTime: number; endTime: number }][] = [
         ['06:30-14:45', { startTime: 390, endTime: 885 }],
         ['6:30 - 14:45', { startTime: 390, endTime: 885 }],
         ['9 - 13', { startTime: 540, endTime: 780 }],

@@ -3,9 +3,9 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { ComponentParser } from '../src/componentParser.js';
-import { baseTokens } from '../src/rules/sharedTokens.js';
-import closures, { ClosureSubject } from '../src/rules/closures.js';
+import { ComponentParser } from '../src/componentParser.ts';
+import { baseTokens } from '../src/rules/sharedTokens.ts';
+import closures, { ClosureSubject } from '../src/rules/closures.ts';
 
 const parser = new ComponentParser(closures, baseTokens);
 
@@ -14,7 +14,7 @@ const {
 } = ClosureSubject;
 
 describe('closures', () => {
-    const valid = [
+    const valid: [string, ClosureSubject][] = [
         ['außer Feiertage', NATIONAL_HOLIDAYS],
         ['außer an Feiertagen', NATIONAL_HOLIDAYS],
         ['außer an gesetzlichen Feiertagen', NATIONAL_HOLIDAYS],

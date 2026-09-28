@@ -3,13 +3,17 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { parse, parseMany, isReliable, ClosureSubject } from '../src/index.js';
+import {
+    parse, parseMany, isReliable, ClosureSubject,
+    type OpeningHoursEntry, type OpenHoursEntry, type ClosureEntry, type Weekday,
+} from '../src/index.ts';
 
-const hours = (days, startTime, endTime) => ({ type: 'OpenHours', days, startTime, endTime });
-const closure = (subject) => ({ type: 'Closure', subject });
+const hours = (days: Weekday[], startTime: number, endTime: number): OpenHoursEntry =>
+    ({ type: 'OpenHours', days, startTime, endTime });
+const closure = (subject: ClosureSubject): ClosureEntry => ({ type: 'Closure', subject });
 
 describe('parse', () => {
-    const valid = [
+    const valid: [string, OpeningHoursEntry[]][] = [
         ['Di-Sa 10:00-18:00 Uhr', [hours([2, 3, 4, 5, 6], 600, 1080)]],
         [
             'Mo-Fr 09:00-17:00 Uhr, außer an Feiertagen',
@@ -48,20 +52,21 @@ describe('parse', () => {
     }
 
     it('rejects non-string input', () => {
-        assert.throws(() => parse(42), TypeError);
-        assert.throws(() => parse(null), TypeError);
+        assert.throws(() => parse(42 as unknown as string), TypeError);
+        assert.throws(() => parse(null as unknown as string), TypeError);
     });
 });
 
 describe('parseMany', () => {
     it('reports success and failure per input without throwing', () => {
-        const results = parseMany(['Mi 8-12 Uhr', 'irgendwann', 24]);
+        const results = parseMany(['Mi 8-12 Uhr', 'irgendwann', 24 as unknown as string]);
 
+        const [first, second, third] = results;
         assert.equal(results.length, 3);
-        assert.deepEqual(results[0], { input: 'Mi 8-12 Uhr', ok: true, result: [hours([3], 480, 720)] });
-        assert.equal(results[1].ok, false);
-        assert.match(results[1].error, /Lexing error/);
-        assert.equal(results[2].ok, false);
+        assert.deepEqual(first, { input: 'Mi 8-12 Uhr', ok: true, result: [hours([3], 480, 720)] });
+        assert.ok(second && !second.ok);
+        assert.match(second.error, /Lexing error/);
+        assert.equal(third?.ok, false);
     });
 
     it('accepts any iterable', () => {
@@ -75,7 +80,7 @@ describe('parseMany', () => {
 });
 
 describe('isReliable', () => {
-    const cases = [
+    const cases: [string, boolean][] = [
         ['Mo-Fr 8-18 Uhr', true],
         ['24/7', true],
         ['Mo-Fr 8-18 Uhr, außer an Feiertagen', true],

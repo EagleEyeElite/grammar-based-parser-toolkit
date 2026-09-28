@@ -1,8 +1,9 @@
 // Copyright (C) 2026 Conrad Klaus
 // SPDX-License-Identifier: GPL-3.0-only
 
-import { createToken } from 'chevrotain';
-import { Dash, Bis } from './sharedTokens.js';
+import { createToken, type IToken } from 'chevrotain';
+import type { GrammarBuilder, GrammarComponent } from '../componentParser.ts';
+import { Dash, Bis } from './sharedTokens.ts';
 
 export const Day = createToken({
     name: 'Day',
@@ -12,11 +13,7 @@ export const Day = createToken({
 export const Plus = createToken({ name: 'Plus', pattern: /\+/ });
 export const Und = createToken({ name: 'Und', pattern: /und/i });
 
-/**
- * ISO weekday numbers.
- * @readonly
- * @enum {number}
- */
+/** ISO weekday numbers. */
 export const DayEnum = Object.freeze({
     MONDAY: 1,
     TUESDAY: 2,
@@ -27,7 +24,10 @@ export const DayEnum = Object.freeze({
     SUNDAY: 7,
 });
 
-const dayMap = {
+/** ISO weekday number, 1 = Monday … 7 = Sunday. */
+export type Weekday = (typeof DayEnum)[keyof typeof DayEnum];
+
+const dayMap: Record<string, Weekday> = {
     mo: DayEnum.MONDAY, montag: DayEnum.MONDAY,
     di: DayEnum.TUESDAY, dienstag: DayEnum.TUESDAY,
     mi: DayEnum.WEDNESDAY, mittwoch: DayEnum.WEDNESDAY,
@@ -42,11 +42,9 @@ const dayMap = {
  * - single day: "Mo", "Mo.", "Montag"
  * - range: "Mo-Fr", "Mo - Fr", "Montag bis Freitag", wrapping ranges like "Fr-Mo"
  * - list: "Mo+Mi+Fr", "Montag und Mittwoch"
- *
- * @param {Object} $ - Chevrotain parser instance
  */
-function defineRules($) {
-    $.RULE('dayExpression', () => {
+function defineRules($: GrammarBuilder) {
+    const dayExpression = $.RULE('dayExpression', () => {
         $.CONSUME(Day);
 
         $.OR([
@@ -80,9 +78,11 @@ function defineRules($) {
             },
         ]);
     });
+
+    return { dayExpression };
 }
 
-function getDayValue(token) {
+function getDayValue(token: IToken): Weekday {
     const dayValue = dayMap[token.image.toLowerCase().replace(/\./g, '')];
     if (!dayValue) {
         throw new Error(`Unrecognized day: ${token.image}`);
@@ -90,22 +90,30 @@ function getDayValue(token) {
     return dayValue;
 }
 
+interface DayExpressionCtx {
+    Day: [IToken, ...IToken[]];
+    Dash?: IToken[];
+    Bis?: IToken[];
+    Plus?: IToken[];
+    Und?: IToken[];
+}
+
 /**
- * @returns {number[]} Weekday numbers in the order they are covered
+ * @returns Weekday numbers in the order they are covered
  */
-function dayExpression(ctx) {
+function dayExpression(ctx: DayExpressionCtx): Weekday[] {
     const firstDay = getDayValue(ctx.Day[0]);
 
     if (ctx.Dash || ctx.Bis) {
-        const endDay = getDayValue(ctx.Day[1]);
-        const days = [];
+        const endDay = getDayValue(ctx.Day[1]!);
+        const days: Weekday[] = [];
 
         if (firstDay > endDay) {
             // Wraps over the end of the week, e.g. Fr-Mo
-            for (let i = firstDay; i <= 7; i++) days.push(i);
-            for (let i = 1; i <= endDay; i++) days.push(i);
+            for (let i = firstDay; i <= 7; i++) days.push(i as Weekday);
+            for (let i = 1; i <= endDay; i++) days.push(i as Weekday);
         } else {
-            for (let i = firstDay; i <= endDay; i++) days.push(i);
+            for (let i = firstDay; i <= endDay; i++) days.push(i as Weekday);
         }
 
         return days;
@@ -118,9 +126,11 @@ function dayExpression(ctx) {
     return [firstDay];
 }
 
-export default {
+const component: GrammarComponent<'dayExpression'> = {
     tokens: [Day, Plus, Und],
     defineRules,
     visitorMethods: { dayExpression },
     entryRule: 'dayExpression',
 };
+
+export default component;

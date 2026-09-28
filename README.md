@@ -6,20 +6,21 @@ Parses German opening-hours text such as
 Mo-Fr 08:00-16:30 Uhr, Sa: 9-13 Uhr; außer an gesetzlichen Feiertagen
 ```
 
-into structured data. Built on a [Chevrotain](https://chevrotain.io) grammar.
+into structured data. Written in TypeScript, built on a [Chevrotain](https://chevrotain.io) grammar.
 
 ## Usage
 
-Requires Node.js 22 or newer.
+Requires Node.js 22.18 or newer (runs the TypeScript sources directly for tests and the example).
 
 ```sh
-npm install
+npm install       # also builds dist/
 npm test
-npm run example   # parses a list of sample strings, see examples/parse-list.js
+npm run typecheck
+npm run example   # parses a list of sample strings, see examples/parse-list.ts
 ```
 
-```js
-import { parse, parseMany, isReliable } from './src/index.js';
+```ts
+import { parse, parseMany, isReliable } from 'german-opening-hours-parser';
 
 parse('Mo-Fr 08:00-16:30 Uhr, außer an Feiertagen');
 // [
@@ -34,11 +35,16 @@ parseMany(['Di 14-18 Uhr', 'nach Vereinbarung']);
 // ]
 ```
 
+It isn't published to npm; install it from GitHub with
+`npm install github:EagleEyeElite/german-opening-hours-parser`.
+
 - `parse(input)` returns an array of entries and throws if the input doesn't match the grammar.
 - `parseMany(inputs)` parses a list and never throws; each input gets an `ok` flag with either a `result` or an `error`.
 - `isReliable(result)` is `false` if the hours carry a note saying they may change in general or during school vacations.
 
 ### Result entries
+
+All result types (`OpeningHoursEntry`, `OpenHoursEntry`, `ClosureEntry`, `AlwaysOpenEntry`, `ParseOutcome`) are exported.
 
 | Type | Fields | Meaning |
 |---|---|---|

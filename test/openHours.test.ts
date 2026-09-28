@@ -3,16 +3,18 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { ComponentParser } from '../src/componentParser.js';
-import { baseTokens } from '../src/rules/sharedTokens.js';
-import openHours from '../src/rules/openHours.js';
+import { ComponentParser } from '../src/componentParser.ts';
+import { baseTokens } from '../src/rules/sharedTokens.ts';
+import openHours, { type OpenHoursEntry } from '../src/rules/openHours.ts';
+import type { Weekday } from '../src/rules/days.ts';
 
 const parser = new ComponentParser(openHours, baseTokens);
 
-const hours = (days, startTime, endTime) => ({ type: 'OpenHours', days, startTime, endTime });
+const hours = (days: Weekday[], startTime: number, endTime: number): OpenHoursEntry =>
+    ({ type: 'OpenHours', days, startTime, endTime });
 
 describe('open hours', () => {
-    const valid = [
+    const valid: [string, OpenHoursEntry[]][] = [
         ['Di 10:00-18:00', [hours([2], 600, 1080)]],
         ['Di. 10-18 Uhr', [hours([2], 600, 1080)]],
         ['Di-Sa: 10:00-18:00 Uhr', [hours([2, 3, 4, 5, 6], 600, 1080)]],

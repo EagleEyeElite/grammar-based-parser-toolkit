@@ -3,14 +3,14 @@
 
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
-import { ComponentParser } from '../src/componentParser.js';
-import { baseTokens } from '../src/rules/sharedTokens.js';
-import days from '../src/rules/days.js';
+import { ComponentParser } from '../src/componentParser.ts';
+import { baseTokens } from '../src/rules/sharedTokens.ts';
+import days from '../src/rules/days.ts';
 
 const parser = new ComponentParser(days, baseTokens);
 
 describe('days', () => {
-    const valid = [
+    const valid: [string, number[]][] = [
         ['Di', [2]],
         ['Do.', [4]],
         ['Samstag', [6]],
