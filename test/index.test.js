@@ -19,6 +19,10 @@ describe('parse', () => {
             'Mo-Do: 7-16 Uhr; Fr: 7-12 Uhr; Änderungen vorbehalten',
             [hours([1, 2, 3, 4], 420, 960), hours([5], 420, 720), closure(ClosureSubject.GENERAL_DEVIATIONS)],
         ],
+        [
+            'Mo-Sa 8-20 Uhr, Sonn- und Feiertage geschlossen',
+            [hours([1, 2, 3, 4, 5, 6], 480, 1200), closure(ClosureSubject.NATIONAL_HOLIDAYS)],
+        ],
         ['24/7', [{ type: 'AlwaysOpen' }]],
         ['Täglich 24 Stunden / 7 Tage', [{ type: 'AlwaysOpen' }]],
     ];

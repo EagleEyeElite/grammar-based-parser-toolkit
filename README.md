@@ -64,7 +64,6 @@ Matching is case-insensitive and whitespace-tolerant.
 - `24:00` as an end time is rejected; use `23:59`.
 - Only one closure note per input, and it has to come last.
 - Free text such as `nach Vereinbarung`, `werktags` or `sonst geschlossen` isn't understood.
-- The lexer picks the first matching token type, so a closure note that starts with a day abbreviation (e.g. `Sonn- und Feiertage geschlossen`) is read as a day and fails in the full grammar.
 
 ## License
 

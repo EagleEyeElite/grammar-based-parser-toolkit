@@ -55,8 +55,10 @@ function operatingHoursExpression(ctx) {
 }
 
 export default {
-    // Order matters: the lexer picks the first token type that matches
-    tokens: [...alwaysOpen.tokens, ...openHours.tokens, ...closures.tokens],
+    // Order matters: the lexer picks the first token type that matches. Closure
+    // phrases go before day tokens, otherwise "Sonn- und Feiertage geschlossen"
+    // would be read as the day "So".
+    tokens: [...alwaysOpen.tokens, ...closures.tokens, ...openHours.tokens],
     defineRules,
     visitorMethods: {
         ...openHours.visitorMethods,
